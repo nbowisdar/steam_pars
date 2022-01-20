@@ -1,4 +1,5 @@
 from main import *
+from filter_data import Filter_data
 
 loot = get_items_from_lootfarm()
 steam = get_items_from_steam(1500)
