@@ -18,7 +18,7 @@ def get_data_from_swapGG():
     new_data = []
     for item in rez:
         value = {
-            'name':item['marketName'],
+            'name':item['marketName'].replace('\'', ''),
             'bot_price': item['price']['sides']['bot'],
             'user_price': item['price']['sides']['user'],
             'have':item['stock']['have'],
@@ -98,3 +98,18 @@ def make_table_STEAM_vs_LOOTFARM(steam, loot):
                 )
                 break
     return match
+
+
+def make_table_LOOT__GG(loot, gg):
+    # list_loot = {item['name']:loot.index(item) for item in loot}
+    list_gg = {item['name']: gg.index(item) for item in gg}
+
+    new_data = []
+    for item in loot:
+        if item['name'] in list_gg:
+            new_data.append({
+                'name': item['name'],
+                'loot_info': item,
+                'gg_info': gg[list_gg[item['name']]]
+            })
+    return new_data
