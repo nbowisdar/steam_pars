@@ -71,14 +71,16 @@ def get_items_from_steam(quantity=100):
     cycle = round(quantity/100)
 #'https://steamcommunity.com/market/search/render/?query=&start=1&count=100&norender=1%2Fnorender%3D1&appid=730'
     for i in range(cycle):
+        print(headers)
         link = f'start={start}&count={quantity}&norender=1%2Fnorender%3D1&appid=730'
         response = requests.get(BASE+link, headers= headers).json()['results']
-        print(response)
+        #print(response)
         rez += response
 
         start = count
         count += 100
     return rez
+
 
 def make_table_STEAM_vs_LOOTFARM(steam, loot):
     match = []
@@ -94,19 +96,20 @@ def make_table_STEAM_vs_LOOTFARM(steam, loot):
 
                 match.append(
                     {'name':item['name'],
-                     'max_price_steam':steam_sell,
-                     'min_price_steam':steam_sale,
-                     'loot_price_sell':bot_price,
+                     'steam':
+                         {'max_price_steam':steam_sell,
+                     'min_price_steam':steam_sale,},
+                     'loot_info':
+                         {'loot_price_sell':bot_price,
                      'loot_price_buy':user_price,
                      'loot_have':i_loot['have'],
                      'loot_max':i_loot['max'],
                      'loot_res':i_loot['res'],
-                     'loot_tr':i_loot['tr']
+                     'loot_tr':i_loot['tr']}
                      }
                 )
                 break
     return match
-
 
 def make_table_LOOT__GG(loot, gg):
     # list_loot = {item['name']:loot.index(item) for item in loot}

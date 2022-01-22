@@ -23,11 +23,11 @@ class Filter_data:
         with open('json_dir/rez.json', 'w', encoding='utf-8') as file:
             json.dump(self.data, file, indent=4, ensure_ascii=False)
 
-    def filter_from_loot_to_GG(self):
-        for item in self.data:
-            item['profit'] = self.get_procent_from_a(item['gg_info']['user_price'], item['loot_info']['loot_price_buy'])
-        self.data = sorted(self.data, key=lambda x: x['profit'])
-        return self.data
+    # def filter_from_loot_to_GG(self):
+    #     for item in self.data:
+    #         item['profit'] = self.get_procent_from_a(item['gg_info']['user_price'], item['loot_info']['loot_price_buy'])
+    #     self.data = sorted(self.data, key=lambda x: x['profit'])
+    #     return self.data
 
 class Correct_price:
     def __init__(self, price):
