@@ -11,6 +11,7 @@ class Filter_data:
         return round(100 - big/small*100, 2)
 
     def __init__(self, data):
+        self.cod = 'without_filter'
         self.data = data
 
     def filter_from_loot_to_steam(self):
@@ -29,3 +30,16 @@ class Filter_data:
             item['profit'] = self.get_procent_from_a(item['gg_info']['user_price'], item['loot_info']['loot_price_buy'])
         self.data = sorted(self.data, key=lambda x: x['profit'])
         return self.data
+
+class Correct_price:
+    def __init__(self, price):
+        if type(price) == int:
+            self.price = round(price/100, 2)
+        else:
+            self.price = 'Not Found price'
+
+
+    def correct_price_for_loot(self, price, cof=0.95):
+        bot_price = price/ 100
+        user_price = round(bot_price * cof, 2)
+        return (bot_price,user_price)

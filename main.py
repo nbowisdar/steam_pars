@@ -1,6 +1,6 @@
 import requests
 from fake_useragent import UserAgent
-from filter_data import Filter_data
+from filter_data import Filter_data, Correct_price
 import json
 import time
 agent = UserAgent().random
@@ -9,6 +9,7 @@ headers = {
     'User-Agent':agent
 }
 
+
 def get_items_from_lootfarm():
     link = 'https://loot.farm/fullprice.json'
     return requests.get(link, headers = headers).json()
@@ -16,11 +17,14 @@ def get_items_from_lootfarm():
 def get_data_from_swapGG():
     rez = requests.get('https://api.swap.gg/prices/730', headers).json()['result']
     new_data = []
+
     for item in rez:
+        bot = Correct_price(item['price']['sides']['bot'])
+        user = Correct_price(item['price']['sides']['user'])
         value = {
             'name':item['marketName'].replace('\'', ''),
-            'bot_price': item['price']['sides']['bot'],
-            'user_price': item['price']['sides']['user'],
+            'bot_price': bot.price,
+            'user_price': user.price,
             'have':item['stock']['have'],
             'max_have':item['stock']['max']
         }
@@ -67,7 +71,9 @@ def get_items_from_steam(quantity=100):
 #'https://steamcommunity.com/market/search/render/?query=&start=1&count=100&norender=1%2Fnorender%3D1&appid=730'
     for i in range(cycle):
         link = f'start={start}&count={quantity}&norender=1%2Fnorender%3D1&appid=730'
-        rez += requests.get(BASE+link, headers= headers).json()['results']
+        response = requests.get(BASE+link, headers= headers).json()['results']
+        print(response)
+        rez += response
 
         start = count
         count += 100
@@ -107,9 +113,5 @@ def make_table_LOOT__GG(loot, gg):
     new_data = []
     for item in loot:
         if item['name'] in list_gg:
-            new_data.append({
-                'name': item['name'],
-                'loot_info': item,
-                'gg_info': gg[list_gg[item['name']]]
-            })
-    return new_data
+            item['gg_info'] = gg[list_gg[item['name']]]
+    return loot
