@@ -9,10 +9,9 @@ class Make_tables:
         print('START making tables')
 
 
-    def make_table_LOOT__GG(self):
+    def make_table_LOOT__GG(self, save=None):
         # list_loot = {item['name']:loot.index(item) for item in loot}
         list_gg = {item['name']: self.gg.index(item) for item in self.gg}
-
 
         new_data = []
         for item in self.loot:
@@ -22,8 +21,9 @@ class Make_tables:
                     'gg_info':self.gg[list_gg[item['name']]]
                 })
                 #item['gg_info'] = gg[list_gg[item['name']]]
-        with open('json_dir/loot-gg.json', 'w', encoding='utf-8') as file:
-            json.dump(new_data, file, indent=4, ensure_ascii=False)
+        if save == True:
+            with open('json_dir/loot-gg.json', 'w', encoding='utf-8') as file:
+                json.dump(new_data, file, indent=4, ensure_ascii=False)
         return new_data
 
 

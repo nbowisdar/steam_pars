@@ -38,7 +38,7 @@ def get_data_from_swapGG():
             'max_have':item['stock']['max']
         }
         new_data.append(value)
-    with open('json_dir/gg1.json.json', 'w', encoding='utf-8') as file:
+    with open('json_dir/gg1.json', 'w', encoding='utf-8') as file:
         json.dump(new_data, file, indent=4, ensure_ascii=False)
     return new_data
 
