@@ -19,6 +19,7 @@ def get_data_from_swapGG():
     new_data = []
 
     for item in rez:
+
         bot = Correct_price(item['price']['sides']['bot'])
         user = Correct_price(item['price']['sides']['user'])
         value = {
@@ -84,8 +85,9 @@ def make_table_STEAM_vs_LOOTFARM(steam, loot):
     for item in steam:
         for i_loot in loot:
             if item['name'] == i_loot['name'].replace('\'', ''):
-                loot_price = i_loot['price']/100
-                loot_buy = round(loot_price*0.95, 2)
+                loot_price = i_loot['price']
+                price = Correct_price(loot_price)
+                bot_price, user_price = price.correct_price_for_loot()
 
                 steam_sell = round(item['sell_price'] / 100, 2)
                 steam_sale = float(item['sale_price_text'][1:])
@@ -94,8 +96,8 @@ def make_table_STEAM_vs_LOOTFARM(steam, loot):
                     {'name':item['name'],
                      'max_price_steam':steam_sell,
                      'min_price_steam':steam_sale,
-                     'loot_price_sell':round(loot_price, 2),
-                     'loot_price_buy':loot_buy,
+                     'loot_price_sell':bot_price,
+                     'loot_price_buy':user_price,
                      'loot_have':i_loot['have'],
                      'loot_max':i_loot['max'],
                      'loot_res':i_loot['res'],
