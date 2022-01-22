@@ -12,10 +12,18 @@ headers = {
 
 def get_items_from_lootfarm():
     link = 'https://loot.farm/fullprice.json'
-    return requests.get(link, headers = headers).json()
+    response = requests.get(link, headers = headers)
+    print(response)
+
+    with open('json_dir/loot.json.json', 'w', encoding='utf-8') as file:
+        json.dump(response.json(), file, indent=4, ensure_ascii=False)
+
+    return response.json()
 
 def get_data_from_swapGG():
-    rez = requests.get('https://api.swap.gg/prices/730', headers).json()['result']
+    response = requests.get('https://api.swap.gg/prices/730', headers)
+    print(response)
+    rez = response.json()['result']
     new_data = []
 
     for item in rez:
@@ -30,6 +38,8 @@ def get_data_from_swapGG():
             'max_have':item['stock']['max']
         }
         new_data.append(value)
+    with open('json_dir/gg1.json.json', 'w', encoding='utf-8') as file:
+        json.dump(new_data, file, indent=4, ensure_ascii=False)
     return new_data
 
 def get_items_from_csmoney():
@@ -112,6 +122,7 @@ def make_table_STEAM_vs_LOOTFARM(steam, loot):
     return match
 
 def make_table_LOOT__GG(loot, gg):
+    print('START_')
     # list_loot = {item['name']:loot.index(item) for item in loot}
     list_gg = {item['name']: gg.index(item) for item in gg}
 
@@ -119,4 +130,6 @@ def make_table_LOOT__GG(loot, gg):
     for item in loot:
         if item['name'] in list_gg:
             item['gg_info'] = gg[list_gg[item['name']]]
+
+    print('End ande returm loot')
     return loot
