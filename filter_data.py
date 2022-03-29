@@ -13,7 +13,9 @@ class Filter_data:
             item['loot_info']['user_price'] = user_price
 
             del item['loot_info']['price']
-            if item['loot_info']['bot_price'] > 1 and item['loot_info']['have'] > 0:
+            loot_res = item['loot_info']['res']
+            loot_tr = item['loot_info']['tr']
+            if item['loot_info']['bot_price'] > 1 and item['gg_info']['have'] > 1 and loot_tr + loot_res > 1:
 
                 new_data.append(item)
         self.data = new_data
