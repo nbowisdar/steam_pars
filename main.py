@@ -2,11 +2,12 @@ import requests
 from fake_useragent import UserAgent
 from filter_data import Filter_data, Correct_price
 import json
+from pprint import pprint
 import time
-agent = UserAgent().random
+z
 l1 = 'http://www.xhaus.com/headers'
 headers = {
-    'User-Agent':agent
+    'User-Agent': agent
 }
 
 
@@ -15,11 +16,12 @@ def get_items_from_lootfarm():
     response = requests.get(link, headers = headers)
     print(response)
 
-    with open('json_dir/loot.json.json', 'w', encoding='utf-8') as file:
-        json.dump(response.json(), file, indent=4, ensure_ascii=False)
+    # with open('json_dir/loot.json.json', 'w', encoding='utf-8') as file:
+    #     json.dump(response.json(), file, indent=4, ensure_ascii=False)
 
     return response.json()
-
+x = get_items_from_lootfarm()
+print(len(x))
 def get_data_from_swapGG():
     response = requests.get('https://api.swap.gg/prices/730', headers)
     print(response)

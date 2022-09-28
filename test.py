@@ -2,6 +2,11 @@ from main import *
 from filter_data import Filter_data
 from make_tables import Make_tables
 
+
+rez = get_items_from_lootfarm()
+print(rez)
+
+
 # with open('json_dir/sorted_rez', encoding='utf-8') as file:
 #     rez = json.load(file)
 # with open('json_dir/gg1.json', encoding='utf-8') as file:
