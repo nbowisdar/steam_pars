@@ -1,48 +1,51 @@
 import requests
 from fake_useragent import UserAgent
-from filter_data import Filter_data, Correct_price
 import json
 from pprint import pprint
 import time
-z
-l1 = 'http://www.xhaus.com/headers'
+
+agent = UserAgent().random
+
+
 headers = {
     'User-Agent': agent
 }
 
 
-def get_items_from_lootfarm():
+def get_items_from_lootfarm(save=False):
     link = 'https://loot.farm/fullprice.json'
     response = requests.get(link, headers = headers)
+    if save:
+        with open('lootfarm_items.json', 'w', encoding='utf-8') as file:
+            json.dump(response.json(), file, indent=4)
     print(response)
 
     # with open('json_dir/loot.json.json', 'w', encoding='utf-8') as file:
     #     json.dump(response.json(), file, indent=4, ensure_ascii=False)
 
     return response.json()
-x = get_items_from_lootfarm()
-print(len(x))
-def get_data_from_swapGG():
-    response = requests.get('https://api.swap.gg/prices/730', headers)
-    print(response)
-    rez = response.json()['result']
-    new_data = []
 
-    for item in rez:
-
-        bot = Correct_price(item['price']['sides']['bot'])
-        user = Correct_price(item['price']['sides']['user'])
-        value = {
-            'name':item['marketName'].replace('\'', ''),
-            'bot_price': bot.price,
-            'user_price': user.price,
-            'have':item['stock']['have'],
-            'max_have':item['stock']['max']
-        }
-        new_data.append(value)
-    with open('json_dir/gg1.json', 'w', encoding='utf-8') as file:
-        json.dump(new_data, file, indent=4, ensure_ascii=False)
-    return new_data
+# def get_data_from_swapGG():
+#     response = requests.get('https://api.swap.gg/prices/730', headers)
+#     print(response)
+#     rez = response.json()['result']
+#     new_data = []
+#
+#     for item in rez:
+#
+#         bot = Correct_price(item['price']['sides']['bot'])
+#         user = Correct_price(item['price']['sides']['user'])
+#         value = {
+#             'name':item['marketName'].replace('\'', ''),
+#             'bot_price': bot.price,
+#             'user_price': user.price,
+#             'have':item['stock']['have'],
+#             'max_have':item['stock']['max']
+#         }
+#         new_data.append(value)
+#     with open('json_dir/gg1.json', 'w', encoding='utf-8') as file:
+#         json.dump(new_data, file, indent=4, ensure_ascii=False)
+#     return new_data
 
 def get_items_from_csmoney():
     #count need to be multiple of 60
@@ -94,34 +97,34 @@ def get_items_from_steam(quantity=100):
     return rez
 
 
-def make_table_STEAM_vs_LOOTFARM(steam, loot):
-    match = []
-    for item in steam:
-        for i_loot in loot:
-            if item['name'] == i_loot['name'].replace('\'', ''):
-                loot_price = i_loot['price']
-                price = Correct_price(loot_price)
-                bot_price, user_price = price.correct_price_for_loot()
-
-                steam_sell = round(item['sell_price'] / 100, 2)
-                steam_sale = float(item['sale_price_text'][1:])
-
-                match.append(
-                    {'name':item['name'],
-                     'steam':
-                         {'max_price_steam':steam_sell,
-                     'min_price_steam':steam_sale,},
-                     'loot_info':
-                         {'loot_price_sell':bot_price,
-                     'loot_price_buy':user_price,
-                     'loot_have':i_loot['have'],
-                     'loot_max':i_loot['max'],
-                     'loot_res':i_loot['res'],
-                     'loot_tr':i_loot['tr']}
-                     }
-                )
-                break
-    return match
+# def make_table_STEAM_vs_LOOTFARM(steam, loot):
+#     match = []
+#     for item in steam:
+#         for i_loot in loot:
+#             if item['name'] == i_loot['name'].replace('\'', ''):
+#                 loot_price = i_loot['price']
+#                 price = Correct_price(loot_price)
+#                 bot_price, user_price = price.correct_price_for_loot()
+#
+#                 steam_sell = round(item['sell_price'] / 100, 2)
+#                 steam_sale = float(item['sale_price_text'][1:])
+#
+#                 match.append(
+#                     {'name':item['name'],
+#                      'steam':
+#                          {'max_price_steam':steam_sell,
+#                      'min_price_steam':steam_sale,},
+#                      'loot_info':
+#                          {'loot_price_sell':bot_price,
+#                      'loot_price_buy':user_price,
+#                      'loot_have':i_loot['have'],
+#                      'loot_max':i_loot['max'],
+#                      'loot_res':i_loot['res'],
+#                      'loot_tr':i_loot['tr']}
+#                      }
+#                 )
+#                 break
+#     return match
 
 def make_table_LOOT__GG(loot, gg):
     print('START_')
