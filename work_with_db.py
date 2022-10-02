@@ -27,7 +27,6 @@ class Cursor:
             for item in date:
                 try:
                     name, price, have, max = item
-                    print(name, price)
                     cur.execute(f"""INSERT INTO {table} (name, price, have, max) VALUES ('{name}', {price}, {have}, {max})
                     ON CONFLICT (name) DO UPDATE SET price={price}, have={have}, max={max}""")
                 except Exception as err:
@@ -36,13 +35,18 @@ class Cursor:
                     count_err += 1
             print('[INFO] was ', count_err, 'errors')
 
+    def create_table(self):
+        with self.connection.cursor() as cur:
+            cur.execute("SELECT lootfarm.name, lootfarm.price, lootfarm.have, lootfarm.max,"
+                        "tradegg.price, tradegg.have FROM lootfarm "
+                        "JOIN tradegg ON tradegg.name = lootfarm.name")
+            data = cur.fetchall()
+            rez = list()
 
-# c = Cursor()
-# max = 10
-# have = 5
-# price = 10.2
-# name = "test"
-# name1 = f'{name}'
-# print(name1)
-# with c.connection.cursor() as cur:
-#     cur.execute(f"""INSERT INTO lootfarm (name, price, have, max) VALUES ('{name}', {price}, {have}, {50})""")
+            for value in data:
+                value_l = list(value)
+                value_l.append(round(value[1] / value_l[4] * 100, 2))
+                rez.append(value_l)
+
+            return sorted(rez, key=lambda x: x[6])
+
