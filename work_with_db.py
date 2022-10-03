@@ -27,7 +27,7 @@ class Cursor:
             for item in date:
                 try:
                     name, price, have, max = item
-                    cur.execute(f"""INSERT INTO {table} (name, price, have, max) VALUES ('{name}', {price}, {have}, {max})
+                    cur.execute(f"""INSERT INTO {table} (name, price, have, max) VALUES ('{name.replace("'", ' ')}', {price}, {have}, {max})
                     ON CONFLICT (name) DO UPDATE SET price={price}, have={have}, max={max}""")
                 except Exception as err:
                     #print(item)

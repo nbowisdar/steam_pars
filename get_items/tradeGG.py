@@ -1,7 +1,7 @@
 import requests
 from fake_useragent import UserAgent
 import json
-from pprint import pprint
+import aiohttp
 
 
 def build_url(offset: int, limit: int, min: int = 1, max: int = 100) -> str:
@@ -10,21 +10,23 @@ def build_url(offset: int, limit: int, min: int = 1, max: int = 100) -> str:
           '&minFloat=0&maxFloat=1&showTradeLock=true&colors=&fresh=true'
 
 #max limit 1500
-def get_tradeit_prices(limit = 1500, offset = 0, min = 0, max = 500, save = False) -> dict:
+async def get_items_from_tradegg(limit = 1500, offset = 0, min = 0, max = 500, save = False) -> list:
+    print('Getting data from tradeGG')
     agent = UserAgent().random
-    print(agent)
     headers = {
         'User-Agent': agent
     }
     all_date = list()
     while True:
         url = build_url(offset, limit)
-        data = requests.get(url, headers=headers).json()
-        if data['items']:
-            all_date.extend(data['items'])
-            offset += limit
-            print('ok')
-            continue
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers) as response:
+                resp_json = await response.json()
+                if resp_json['items']:
+                    all_date.extend(resp_json['items'])
+                    offset += limit
+                    print('ok')
+                    continue
         break
     good_date = list()
     for i in all_date:
@@ -37,14 +39,11 @@ def get_tradeit_prices(limit = 1500, offset = 0, min = 0, max = 500, save = Fals
             good_date.append(rez)
         except Exception as err:
             print(f'[Error]: {err}')
-    print(f'Got {len(good_date)} items from {len(data["items"])}')
+    print(f'Got {len(good_date)} items from {len(all_date)}')
     if save:
         with open(f'tradeit_items.json', 'w', encoding='utf-8') as file:
             json.dump(good_date, file, indent=3)
-    return data['items']
-
-
-data = get_tradeit_prices(limit=1500, min=1, max=100, save=True)
+    return good_date
 
 
 

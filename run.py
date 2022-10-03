@@ -1,35 +1,24 @@
-from collect_date import get_items_from_lootfarm
+from get_items.lootfarm import get_items_from_lootfarm
+from get_items.tradeGG import get_items_from_tradegg
 from work_with_db import Cursor
-import json
-from time import perf_counter
+import asyncio
 
-#rez = get_items_from_lootfarm(save=True)
-with open('tradeit_items.json') as file:
-    rez_trade = json.load(file)
-# with open('lootfarm_items.json') as file:
-#     rez = json.load(file)
-#
-#
-# data = list()
-# for i in rez:
-#     item = list()
-#     item.append(i['name']), item.append(i['price']/100), item.append(i['have']), item.append(i['max'])
-#     data.append(item)
 
-#start = perf_counter()
-cursor = Cursor()
-x = cursor.create_table()
-for i in x:
-    print(*i)
-#cursor.save_to_db('lootfarm', data)
-#cursor.save_to_db('tradegg', rez_trade)
-# loot = cursor.show_date('lootfarm')
-#gg = cursor.show_date('tradegg')
-#print( len(gg))
-# print(perf_counter() - start)
-#data = cursor.show_date('lootfarm')
-#print(data)
-#print(len(data))
-# for i in data:
-#     print(i)
+async def main(time: int):
+    while True:
+        cursor = Cursor()
+        lootfarm_task = asyncio.create_task(get_items_from_lootfarm())
+        tradegg_task = asyncio.create_task(get_items_from_tradegg())
+        lootfarm = await lootfarm_task
+        tradegg = await tradegg_task
+        # print('Len - loot -', len(lootfarm))
+        # print('Len - trade -', len(tradegg))
+        cursor.save_to_db('lootfarm', lootfarm)
+        cursor.save_to_db('tradegg', tradegg)
+        asyncio.sleep(time)
+
+if __name__ == '__main__':
+    asyncio.run(main(100))
+
+
 

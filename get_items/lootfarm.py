@@ -1,27 +1,30 @@
-import requests
 from fake_useragent import UserAgent
 import json
-from pprint import pprint
-import time
-
-agent = UserAgent().random
+import aiohttp
 
 
-headers = {
-    'User-Agent': agent
-}
-
-
-def get_items_from_lootfarm(save=False):
-    link = 'https://loot.farm/fullprice.json'
-    response = requests.get(link, headers = headers)
+async def get_items_from_lootfarm(save=False) -> list:
+    print('Getting data from lootfarm')
+    agent = UserAgent().random
+    headers = {
+        'User-Agent': agent
+    }
+    link = 'https://loot.farm/fullprice.json' #
+    async with aiohttp.ClientSession() as session:
+        async with session.get(link, headers=headers) as response:
+            rez = list()
+            resp_json = await response.json()
+            for i in resp_json:
+                item = list()
+                item.append(i['name']), item.append(i['price']/100), item.append(i['have']), item.append(i['max'])
+                rez.append(item)
     if save:
         with open('lootfarm_items.json', 'w', encoding='utf-8') as file:
-            json.dump(response.json(), file, indent=4)
-    print(response)
-    return response.json()
+            json.dump(rez, file, indent=4)
+    print('Data from lootfarm was gotten')
+    return rez
 
-get_items_from_lootfarm(save=True)
+
 
 # def get_data_from_swapGG():
 #     response = requests.get('https://api.swap.gg/prices/730', headers)
