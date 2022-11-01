@@ -1,10 +1,11 @@
 import asyncio
-from pprint import pprint
-
 from fake_useragent import UserAgent
 import json
 import aiohttp
 from loguru import logger
+from sqlalchemy.orm import Session
+from steam_pars.database.db_alchemy import LFcsItem, engine
+from steam_pars.schemas.lootfarm_schemas import LFcsItemsSchema, LFcsItemSchema
 
 
 async def get_items_from_lootfarm(save=False) -> list:
@@ -16,22 +17,40 @@ async def get_items_from_lootfarm(save=False) -> list:
     link = 'https://loot.farm/fullprice.json' #
     async with aiohttp.ClientSession() as session:
         async with session.get(link, headers=headers) as response:
-            rez = list()
+            #rez = list()
             resp_json = await response.json()
-            for i in resp_json:
-                item = list()
-                item.append(i['name']), item.append(i['price']/100), item.append(i['have']), item.append(i['max'])
-                rez.append(item)
-    if save:
-        with open('lootfarm_items.json', 'w', encoding='utf-8') as file:
-            json.dump(rez, file, indent=4)
-    logger.info('Data from lootfarm was gotten')
-    return rez
+            #good_resp = LFcsItems(resp_json)
+            good_resp = [LFcsItemSchema(**item) for item in resp_json]
+            with Session(engine) as db_session:
+                rez = []
+                for item in good_resp:
+                    rez.append(
+                        LFcsItem(**item.dict())
+                    )
+                db_session.add_all(rez)
+                db_session.commit()
+
+            # name = good_resp[0].name
+            # price = good_resp[1].price
+
+            #print(name, price)
+
+
+            #print(good_resp)
+            # for i in resp_json:
+            #     item = list()
+            #     item.append(i['name']), item.append(i['price']/100), item.append(i['have']), item.append(i['max'])
+            #     rez.append(item)
+    # if save:
+    #     with open('lootfarm_items.json', 'w', encoding='utf-8') as file:
+    #         json.dump(rez, file, indent=4)
+    # logger.info('Data from lootfarm was gotten')
+    return good_resp
 
 
 async def main():
     x = await get_items_from_lootfarm()
-    pprint(x)
+    #pprint(x)
 
 asyncio.run(main())
 
