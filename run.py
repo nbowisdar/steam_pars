@@ -1,6 +1,6 @@
-from get_items.lootfarm import get_items_from_lootfarm
-from get_items.tradeGG import get_items_from_tradegg
-from work_with_db import Cursor
+from steam_pars.get_items.lootfarm import get_items_from_lootfarm
+from steam_pars.get_items.tradeGG import get_items_from_tradegg
+from steam_pars.database.work_with_db import Cursor
 import asyncio
 
 
