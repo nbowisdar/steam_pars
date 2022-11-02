@@ -4,8 +4,8 @@ password = '1324'
 database = 'steam'
 port = 5432
 
-class Cursor:
 
+class Cursor:
     def __init__(self):
         connection = psycopg2.connect(
             user=username,

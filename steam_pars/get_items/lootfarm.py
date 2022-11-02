@@ -2,42 +2,29 @@ import asyncio
 from fake_useragent import UserAgent
 import aiohttp
 from loguru import logger
-from steam_pars.database.mongo_db import get_loot_inst
-from time import perf_counter
+from steam_pars.database.lootfarm_db import get_loot_inst
 
 loot = get_loot_inst()
 
-async def get_items_from_lootfarm(save=False) -> list:
+
+async def get_items_from_lootfarm() -> None:
     logger.info('Getting data from lootfarm')
     agent = UserAgent().random
     headers = {
         'User-Agent': agent
     }
-    link = 'https://loot.farm/fullprice.json' #
+    link = 'https://loot.farm/fullprice.json'
     async with aiohttp.ClientSession() as session:
         async with session.get(link, headers=headers) as response:
-            #rez = list()
             resp_json = await response.json()
-            start = perf_counter()
-            loot.insert_many(resp_json)
-            finish = perf_counter() - start
-            logger.info(f'Took seconds - {finish} ',)
 
-            #print(good_resp)
-            # for i in resp_json:
-            #     item = list()
-            #     item.append(i['name']), item.append(i['price']/100), item.append(i['have']), item.append(i['max'])
-            #     rez.append(item)
-    # if save:
-    #     with open('lootfarm_items.json', 'w', encoding='utf-8') as file:
-    #         json.dump(rez, file, indent=4)
-    # logger.info('Data from lootfarm was gotten')
-    #return good_resp
+            # before insert date clear the table
+            loot.prune_collection()
+            loot.insert_many(resp_json)
 
 
 async def main():
     x = await get_items_from_lootfarm()
-    #pprint(x)
 
 asyncio.run(main())
 
