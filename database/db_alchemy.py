@@ -15,19 +15,20 @@ class LFcsItem(Base):
     price: Mapped[int]
     have: Mapped[int]
     max: Mapped[int]
+    rate: Mapped[int]
     tr: Mapped[int]
     res: Mapped[int]
 
     def __str__(self):
         return str(self.id)
 
-# Base.metadata.create_all(engine)
+#Base.metadata.create_all(engine)
 
 
 if __name__ == '__main__':
     session = Session(engine)
-    stmt = select(LFcsItem).where(LFcsItem.id < 10)
-    items = LFcsItem.query
+    stmt = select(LFcsItem)
 
-    items = session.query(LFcsItem).select(LFcsItem.id < 10)
-    print(items)
+    items = session.scalars(stmt)
+    for item in items:
+        print(item)

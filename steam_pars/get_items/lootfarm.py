@@ -1,12 +1,11 @@
 import asyncio
 from fake_useragent import UserAgent
-import json
 import aiohttp
 from loguru import logger
-from sqlalchemy.orm import Session
-from steam_pars.database.db_alchemy import LFcsItem, engine
-from steam_pars.schemas.lootfarm_schemas import LFcsItemsSchema, LFcsItemSchema
+from steam_pars.database.mongo_db import get_loot_inst
+from time import perf_counter
 
+loot = get_loot_inst()
 
 async def get_items_from_lootfarm(save=False) -> list:
     logger.info('Getting data from lootfarm')
@@ -19,22 +18,10 @@ async def get_items_from_lootfarm(save=False) -> list:
         async with session.get(link, headers=headers) as response:
             #rez = list()
             resp_json = await response.json()
-            #good_resp = LFcsItems(resp_json)
-            good_resp = [LFcsItemSchema(**item) for item in resp_json]
-            with Session(engine) as db_session:
-                rez = []
-                for item in good_resp:
-                    rez.append(
-                        LFcsItem(**item.dict())
-                    )
-                db_session.add_all(rez)
-                db_session.commit()
-
-            # name = good_resp[0].name
-            # price = good_resp[1].price
-
-            #print(name, price)
-
+            start = perf_counter()
+            loot.insert_many(resp_json)
+            finish = perf_counter() - start
+            logger.info(f'Took seconds - {finish} ',)
 
             #print(good_resp)
             # for i in resp_json:
@@ -45,7 +32,7 @@ async def get_items_from_lootfarm(save=False) -> list:
     #     with open('lootfarm_items.json', 'w', encoding='utf-8') as file:
     #         json.dump(rez, file, indent=4)
     # logger.info('Data from lootfarm was gotten')
-    return good_resp
+    #return good_resp
 
 
 async def main():
