@@ -8,11 +8,11 @@ loot_mongo = get_loot_inst()
 
 data = loot_mongo.get_all()
 
-with Session(engine) as session:
-    #item = Item(**data.items[0].dict())
-    items = [Item(name='test1'), Item(name='test2')]
-    session.add_all(items)
-    session.commit()
+# with Session(engine) as session:
+#     #item = Item(**data.items[0].dict())
+#     items = [Item(name='test1'), Item(name='test2')]
+#     session.add_all(items)
+#     session.commit()
 
 # with Session(engine) as session:
 #     item_one = Item(name='m4a4',
@@ -22,3 +22,9 @@ with Session(engine) as session:
 #     session.commit()
 
 
+with Session(engine) as session:
+    smtp = select(Item).where(Item.name == 'aka-47')
+
+    for i in session.scalars(smtp):
+        i.name = 'new_name'
+    session.commit()
