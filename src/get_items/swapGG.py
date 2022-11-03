@@ -20,5 +20,9 @@ def get_data_from_swapGG():
         }
         new_data.append(value)
     return new_data
+
+s = get_data_from_swapGG()
+
+print(len(s))
 # with open('json_dir/gg1.json', 'w', encoding='utf-8') as file:
 #     json.dump(new_data, file, indent=4, ensure_ascii=False)

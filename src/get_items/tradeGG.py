@@ -32,22 +32,7 @@ async def get_items_from_tradegg(local_offset=0):
                     local_offset += limit
                     continue
         return
-    # good_date = list()
-    # for i in all_date:
-    #     try:
-    #         rez = list()
-    #         rez.append(i['name'])
-    #         rez.append(i['price'] / 100)
-    #         rez.append(len(i['botIndexes']))
-    #         rez.append(0)
-    #         good_date.append(rez)
-    #     except Exception as err:
-    #         print(f'[Error]: {err}')
-    # print(f'Got {len(good_date)} items from {len(all_date)}')
-    # if save:
-    #     with open(f'tradeit_items.json', 'w', encoding='utf-8') as file:
-    #         json.dump(good_date, file, indent=3)
-    # return good_date
+
 
 
 asyncio.run(get_items_from_tradegg())

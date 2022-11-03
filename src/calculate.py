@@ -1,6 +1,5 @@
 from get_items.lootfarm import get_items_from_lootfarm
 from get_items.tradeGG import get_items_from_tradegg
-from work_with_db import Cursor
 import asyncio
 
 
