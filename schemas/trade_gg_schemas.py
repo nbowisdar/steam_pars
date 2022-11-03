@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class TradeGGItem(BaseModel):
-    name: str
+    #name: str
     price: int
     have: int
 

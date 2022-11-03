@@ -1,23 +1,21 @@
-from get_items.lootfarm import get_items_from_lootfarm
-from get_items.tradeGG import get_items_from_tradegg
-import asyncio
+from steam_pars.database.lootfarm_db import get_loot_inst
+from steam_pars.database.tradegg_db import get_trade_gg_inst
+from time import perf_counter
 
+loot = get_loot_inst()
+trade = get_trade_gg_inst()
 
-async def main(time: int):
-    while True:
-        cursor = Cursor()
-        lootfarm_task = asyncio.create_task(get_items_from_lootfarm())
-        tradegg_task = asyncio.create_task(get_items_from_tradegg())
-        lootfarm = await lootfarm_task
-        tradegg = await tradegg_task
-        #print('Len - loot -', len(lootfarm))
-        #print('Len - trade -', len(tradegg))
-        cursor.save_to_db('tables_lootfarmmodel', lootfarm)
-        cursor.save_to_db('tables_tradeggmodel', tradegg)
-        asyncio.sleep(time)
+loot_items = loot.get_all()
+trade_items = trade.get_all()
 
-if __name__ == '__main__':
-    asyncio.run(main(100))
+count = 0
 
+start = perf_counter()
+for item in trade_items.items:
+    for item_loot in loot_items.items:
+        if item.name == item_loot.name:
+            count += 1
+            continue
 
-
+print(perf_counter() - start)
+print(f'all matches - {count}')
