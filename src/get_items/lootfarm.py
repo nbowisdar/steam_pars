@@ -2,7 +2,7 @@ import asyncio
 from fake_useragent import UserAgent
 import aiohttp
 from loguru import logger
-from steam_pars.database.lootfarm_db import get_loot_inst
+from steam_pars.database.mongo_db.lootfarm_db import get_loot_inst
 
 loot = get_loot_inst()
 

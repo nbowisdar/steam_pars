@@ -21,6 +21,7 @@ pycares==4.2.2
 pycparser==2.21
 pydantic==1.10.2
 pymongo==4.3.2
+python-dotenv==0.21.0
 SQLAlchemy==2.0.0b2
 sqlparse==0.4.3
 typing_extensions==4.4.0

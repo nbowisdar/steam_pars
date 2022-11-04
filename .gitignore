@@ -6,3 +6,4 @@ lootfarm_items.json
 tradeit_items.json
 test.py
 venv/
+src/config/.env

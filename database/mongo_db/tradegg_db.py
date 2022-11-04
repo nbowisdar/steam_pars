@@ -1,5 +1,4 @@
-from steam_pars.database.mongo_db import MongoQueriesBase, db
-from steam_pars.schemas.trade_gg_schemas import TradeGGItem, TradeGGItems
+from steam_pars.database.mongo_db.base import MongoQueriesBase, db
 
 
 # calculate numer of items by bots that have this item

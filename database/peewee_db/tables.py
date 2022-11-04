@@ -1,19 +1,19 @@
 from peewee import CharField, IntegerField
 
-from steam_pars.database.peewee_db.config import BaseModel, db
+from steam_pars.database.peewee_db.connect import BaseModel, db
 
 
 class LootFarm(BaseModel):
     name = CharField(unique=True)
-    price_loot = IntegerField()
-    have_loot = IntegerField()
-    max_loot = IntegerField()
+    price = IntegerField()
+    have = IntegerField()
+    max = IntegerField()
 
 
 class TradeGG(BaseModel):
-    name_trade = CharField(unique=True)
-    price_trade = IntegerField()
-    have_trade = IntegerField()
+    name = CharField(unique=True)
+    price = IntegerField()
+    have = IntegerField()
 
 
 if __name__ == '__main__':

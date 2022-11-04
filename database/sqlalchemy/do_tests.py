@@ -1,8 +1,8 @@
 from engine import engine
-from tables import Item, Loot, TradeGG
+from tables import Item
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from steam_pars.database.lootfarm_db import get_loot_inst
+from steam_pars.database.mongo_db.lootfarm_db import get_loot_inst
 
 loot_mongo = get_loot_inst()
 

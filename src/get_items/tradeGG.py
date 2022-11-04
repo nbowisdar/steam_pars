@@ -1,7 +1,7 @@
 import asyncio
 from fake_useragent import UserAgent
 import aiohttp
-from steam_pars.database.tradegg_db import get_trade_gg_inst
+from steam_pars.database.mongo_db.tradegg_db import get_trade_gg_inst
 
 limit: int = 1500
 min_price: int = 5

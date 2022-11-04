@@ -1,4 +1,4 @@
-from steam_pars.database.mongo_db import MongoQueriesBase, db
+from steam_pars.database.mongo_db.base import MongoQueriesBase, db
 
 
 class LootFarmQueries(MongoQueriesBase):

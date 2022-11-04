@@ -1,9 +1,10 @@
 from pydantic import BaseModel
-from steam_pars.schemas.lootfarm_schemas import LFcsItemSchema
-from steam_pars.schemas.trade_gg_schemas import TradeGGItem
 
 
-class Item:
+class ItemSchema(BaseModel):
     name: str
-    lootfarm: list[LFcsItemSchema]
-    tradge_gg: list[TradeGGItem]
+    loot_price: int
+    loot_have: int
+    loot_max: int
+    trade_price: int
+    trade_have: int
