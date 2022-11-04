@@ -2,6 +2,7 @@ from steam_pars.database.mongo_db import MongoQueriesBase, db
 from steam_pars.schemas.trade_gg_schemas import TradeGGItem, TradeGGItems
 
 
+# calculate numer of items by bots that have this item
 def get_amount(bots: list | None):
     if bots:
         return len(bots)
@@ -14,28 +15,29 @@ class TradeGGQueries(MongoQueriesBase):
 
         #self.collection = collection
 
-    def get_all(self) -> TradeGGItems:
+    def get_all(self) -> list[dict]:
         # I don't need all the fields
         query = self.collection.find(
-            {}, {'name': 1, 'price': 1, 'botIndexes': 1}
+            {}, {'_id': 0, 'name': 1, 'price': 1, 'botIndexes': 1}
         )
         rez = []
         for item in query:
             # botIndexes represents list with bots that has an item - I want to get an amount
             if 'botIndexes' in item:
+                # if any of bots has this item we drop this field and take amount of items
                 have = get_amount(item.pop('botIndexes'))
             else:
                 have = 0
             item.update({'have': have})
-            rez.append(TradeGGItem(**item))
-        return TradeGGItems(items=rez)
+            rez.append(item)
+        return rez
 
 
 def get_trade_gg_inst() -> TradeGGQueries:
     trade_gg = db.tradegg
     return TradeGGQueries(trade_gg)
 
-#
+
 # if __name__ == '__main__':
 #     gg = get_trade_gg_inst()
-#     gg.get_all()
+#     all1 = gg.get_all()
