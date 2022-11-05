@@ -21,7 +21,7 @@ start = perf_counter()
 items = loot_trade_table()
 
 
-sorted_list = sorted(items, key=lambda item: find_percentage(item.loot_price, item.trade_price), reverse=False)
+sorted_list = sorted(items, key=lambda item: find_percentage(item.loot_price, item.trade_price), reverse=True)
 
 for i in sorted_list:
     print(i)
