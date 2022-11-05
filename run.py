@@ -1,24 +1,30 @@
-from steam_pars.get_items.lootfarm import get_items_from_lootfarm
-from steam_pars.get_items.tradeGG import get_items_from_tradegg
-from steam_pars.database.funny_old_orm import Cursor
-import asyncio
+from multiprocessing import Process
+from steam_pars.database.mongo_db.lootfarm_db import get_loot_inst
+from steam_pars.database.mongo_db.tradegg_db import get_trade_gg_inst
+from steam_pars.src.calculate import main
+from steam_pars.src.pulling import start_pulling
+from time import sleep
 
-
-async def main(time: int):
+def test():
     while True:
-        cursor = Cursor()
-        lootfarm_task = asyncio.create_task(get_items_from_lootfarm())
-        tradegg_task = asyncio.create_task(get_items_from_tradegg())
-        lootfarm = await lootfarm_task
-        tradegg = await tradegg_task
-        # print('Len - loot -', len(lootfarm))
-        # print('Len - trade -', len(tradegg))
-        cursor.save_to_db('lootfarm', lootfarm)
-        cursor.save_to_db('tradegg', tradegg)
-        asyncio.sleep(time)
+        print('hello')
+        sleep(1)
 
 if __name__ == '__main__':
-    asyncio.run(main(100))
+
+    # get mongo_db instances
+    loot = get_loot_inst()
+    trade = get_trade_gg_inst()
+    # creating two main process
+    pulling_proc = Process(target=start_pulling)
+    calculating_proc = Process(target=main, args=(loot, trade))
+    #calculating_proc = Process(target=test)
 
 
+    # starting them
+    pulling_proc.start()
+    calculating_proc.start()
+
+    pulling_proc.join()
+    calculating_proc.join()
 

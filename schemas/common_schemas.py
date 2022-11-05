@@ -8,3 +8,5 @@ class ItemSchema(BaseModel):
     loot_max: int
     trade_price: int
     trade_have: int
+    percent: float | None
+

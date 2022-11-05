@@ -1,12 +1,12 @@
-import asyncio
 from fake_useragent import UserAgent
 import aiohttp
 from steam_pars.database.mongo_db.tradegg_db import get_trade_gg_inst
 
 limit: int = 1500
-min_price: int = 1
-max_price: int = 200
+min_price: float = 0.4
+max_price: int = 400
 trade_mongo = get_trade_gg_inst()
+
 
 def build_url(offset=0) -> str:
     base = 'https://tradeit.gg/api/v2/inventory/data?gameId=730&'
@@ -32,6 +32,3 @@ async def get_items_from_tradegg(local_offset=0):
                     local_offset += limit
                     continue
         return
-
-
-

@@ -19,6 +19,7 @@ async def pulling(sec: int, one_time=False) -> None:
         return
     while True:
         await run_tasks()
+        logger.info('got new data')
         await asyncio.sleep(sec)
 
 
