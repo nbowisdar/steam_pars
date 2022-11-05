@@ -11,7 +11,7 @@ class LootFarm(BaseModel):
 
 
 class TradeGG(BaseModel):
-    name = CharField(unique=True)
+    name = CharField()
     price = IntegerField()
     have = IntegerField()
 

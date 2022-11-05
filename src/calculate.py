@@ -4,31 +4,34 @@ from steam_pars.database.mongo_db.tradegg_db import get_trade_gg_inst
 from time import perf_counter
 from math import fabs
 
+from steam_pars.src.pulling import start_pulling
+
+
 def find_percentage(a, b) -> int:
     return fabs(a - b) / a
 
 
-loot = get_loot_inst()
-trade = get_trade_gg_inst()
+def main():
+    loot = get_loot_inst()
+    trade = get_trade_gg_inst()
 
-# loot_items = loot.get_all()
-# tradegg_items = trade.get_all()
-
-start = perf_counter()
-
-#insert_all_loot(loot_items)
-#insert_all_trade_gg(tradegg_items)
-items = loot_trade_table()
+    # TODO line below I must put in different process
+    start_pulling(one_time=True)
+    #
 
 
-sorted_list = sorted(items, key=lambda item: find_percentage(item.loot_price, item.trade_price), reverse=True)
+    insert_all_loot(loot.get_all())
+    insert_all_trade_gg(trade.get_all())
+    items = loot_trade_table()
 
-for i in sorted_list:
-    print(i)
+
+    sorted_list = sorted(items, key=lambda item: find_percentage(item.loot_price, item.trade_price), reverse=True)
+
+# TODO filter date, and get only profitable pair
 
 
-print(perf_counter() - start)
-
+if __name__ == '__main__':
+    main()
 
 
 

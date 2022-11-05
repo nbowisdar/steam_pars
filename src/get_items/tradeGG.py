@@ -4,8 +4,8 @@ import aiohttp
 from steam_pars.database.mongo_db.tradegg_db import get_trade_gg_inst
 
 limit: int = 1500
-min_price: int = 5
-max_price: int = 25
+min_price: int = 1
+max_price: int = 200
 trade_mongo = get_trade_gg_inst()
 
 def build_url(offset=0) -> str:

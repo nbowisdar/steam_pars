@@ -11,10 +11,17 @@ def insert_all_loot(data: list[dict]):
 
 def insert_all_trade_gg(data: list[dict]):
     with db.atomic():
-        LootFarm.delete().execute()
+        TradeGG.delete().execute()
         TradeGG.insert_many(data).execute()
 
 
+# def prune_all_tables():
+#     with db.atomic():
+#         LootFarm.delete().execute()
+#         TradeGG.delete().execute()
+
+
+# create a table
 def loot_trade_table() -> list[ItemSchema]:
     with db.atomic():
         cursor = db.execute_sql('''
@@ -37,4 +44,4 @@ def loot_trade_table() -> list[ItemSchema]:
 
 
 if __name__ == '__main__':
-    loot_trade_table()
+    x = TradeGG.select().execute()

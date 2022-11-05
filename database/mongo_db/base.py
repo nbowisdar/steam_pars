@@ -1,5 +1,8 @@
 from pymongo import MongoClient
-client = MongoClient('127.0.0.1', 27017)
+from steam_pars.src.config.config import MONGO_HOST, MONGO_PORT
+
+
+client = MongoClient(MONGO_HOST, MONGO_PORT)
 db = client.steam
 
 

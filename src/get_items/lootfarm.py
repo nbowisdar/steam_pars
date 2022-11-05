@@ -1,4 +1,3 @@
-import asyncio
 from fake_useragent import UserAgent
 import aiohttp
 from loguru import logger
