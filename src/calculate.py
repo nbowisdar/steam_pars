@@ -5,6 +5,7 @@ from steam_pars.database.mongo_db.tradegg_db import get_trade_gg_inst, TradeGGQu
 from math import fabs
 from steam_pars.schemas.common_schemas import ItemSchema
 from loguru import logger
+from steam_pars.rebbit_server.send_data import send_data
 
 
 def find_percentage(a, b) -> int:
@@ -27,12 +28,13 @@ def main(loot_mongo: LootFarmQueries, trade_mongo: TradeGGQueries, sec: int = 30
         insert_all_trade_gg(trade_mongo.get_all())
         items = loot_trade_table()
 
+        # here I got the good date, and I want to send it on my another app
         good = find_profitable_pair(items)
-        for i in good:
-            print(i)
 
+        send_data(good)
         logger.info('before sleep')
         sleep(sec)
+
 
 if __name__ == '__main__':
     loot = get_loot_inst()
