@@ -12,3 +12,7 @@ DB_PORT = int(getenv('DB_PORT'))
 # Mongo db
 MONGO_HOST = getenv('MONGO_HOST')
 MONGO_PORT = int(getenv('MONGO_PORT'))
+
+#Telegram
+TOKEN_BOT = getenv('TOKEN_BOT')
+CHAT_ID = int(getenv('CHAT_ID'))
